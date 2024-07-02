@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class MessageController {
 	
 	@Value("${spring.boot.message}")
-	private String value;
+	private String vaalue;
 	
 	@RequestMapping("/hi")
 	public ResponseEntity<String> hiMessage(){
-		return new ResponseEntity<String>(value,HttpStatus.OK);
+		return new ResponseEntity<String>(vaalue,HttpStatus.OK);
 	}
 }
