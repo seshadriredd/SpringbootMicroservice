@@ -22,7 +22,7 @@ public class Restcontroller {
 	public ResponseEntity<String> status(HttpServletRequest request) {
 		return new ResponseEntity<String>("I am available ::"+request.getSession().getId(),HttpStatus.OK);
 	}
-	@PostMapping("/add")
+	@PostMapping("/admin/add")
 	public ResponseEntity<Student> add(@RequestBody Student student, HttpServletRequest request) {
 		obj.setId(student.getId());
 		obj.setGrade(student.getGrade());
