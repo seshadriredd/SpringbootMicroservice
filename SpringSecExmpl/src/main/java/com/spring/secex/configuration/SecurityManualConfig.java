@@ -67,7 +67,7 @@ public class SecurityManualConfig {
     public AuthenticationProvider provider() {
     	System.out.println("Inside the Dao authentication provider");
     	DaoAuthenticationProvider dao = new DaoAuthenticationProvider();
-    	dao.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
+    	dao.setPasswordEncoder(new BCryptPasswordEncoder());
     	dao.setUserDetailsService(userDetailService());
 		return dao;
     	

@@ -21,7 +21,7 @@ public class UserController {
 	BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 	@PostMapping("/addUser")
 	public ResponseEntity<Users> addrole(@RequestBody Users user){
-		//user.setPassword(encoder.encode(user.getPassword()));
+		user.setPassword(encoder.encode(user.getPassword()));
 		return new ResponseEntity<Users>(repo.save(user),HttpStatus.CREATED);
 	}
 }
