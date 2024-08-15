@@ -19,7 +19,7 @@ public class UserDetailServiceimpl implements UserDetailsService {
 		System.out.println("Inside loaduserby username method : "+username);
 		Users user = repo.findByUsername(username);
 		if (user==null) {
-			System.out.println("Hey seshadri user not found"+user.getUsername());
+			System.out.println("Hey seshadri user not found");
 			throw new UsernameNotFoundException("User not found"+user);
 		}
 		return new UserInfo(user);

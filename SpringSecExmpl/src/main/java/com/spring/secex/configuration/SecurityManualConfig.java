@@ -17,7 +17,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.spring.secex.jwt.JwtServiceFilter;
 import com.spring.secex.service.UserDetailServiceimpl;
 
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -28,6 +30,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 @EnableWebSecurity
 public class SecurityManualConfig {
 	
+	@Autowired
+	JwtServiceFilter jwtServiceFilter;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     	System.out.println("Inside the securityFilterchain");
@@ -38,10 +42,12 @@ public class SecurityManualConfig {
 					.requestMatchers("/api/admin/**").hasRole("ADMIN")
 					.requestMatchers("/api/user/**").hasRole("USER")
 					.requestMatchers("/api/gm/**").hasRole("GM")
+					.requestMatchers("/login","/register").permitAll()
 					.requestMatchers("/**").permitAll())
 			//.formLogin(withDefaults()) -- we commented because at browser will ask again and again username and passoword so using basicHttp we can go
     		.httpBasic(withDefaults())
-    		.sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+    		.sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+    		.addFilterBefore(jwtServiceFilter,UsernamePasswordAuthenticationFilter.class);
 		return http.build();
 	}
     //Note: while setting authorization SecurityFiletrChain class we have use .hasRole("AMIN") or .hasRole("USER") or .hasROle("GM") etc...

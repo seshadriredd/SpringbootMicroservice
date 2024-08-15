@@ -1,6 +1,5 @@
 package com.spring.secex.jwt;
 
-import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 import java.util.Base64;
@@ -10,10 +9,12 @@ import java.util.Map;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
+
 import org.springframework.stereotype.Service;
 
 import com.spring.secex.model.AuthUser;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -33,13 +34,27 @@ public class JwtService {
 			.claims(claims)
 			.subject(user.getUsername())
 			.issuedAt(Date.from(Instant.now()))
-			.expiration(Date.from(Instant.now().plusMillis(200000)))
+			.expiration(Date.from(Instant.now().plusMillis(100000)))
 			.signWith(getkey())
 			.compact();
 	}
 	private SecretKey getkey() {
 		
 		return Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));
+	}
+	public String extractUser(String jwt) {
+		return getClaims(jwt).getSubject();
+	}
+	public Claims getClaims(String jwt) {
+		Claims claims = Jwts.parser()
+							.verifyWith(getkey())
+							.build()
+							.parseSignedClaims(jwt)
+							.getPayload();
+		return claims;
+	}
+	public boolean isTokenValid(String jwt) {
+		return getClaims(jwt).getExpiration().after(Date.from(Instant.now()));
 	}
 
 }

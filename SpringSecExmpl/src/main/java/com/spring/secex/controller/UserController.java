@@ -30,13 +30,13 @@ class UserController {
 	AuthenticationManager authenticationManager;
 	@Autowired
 	JwtService jwtService;
-	@PostMapping("/addUser")
+	@PostMapping("/register")
 	public ResponseEntity<Users> addrole(@RequestBody Users user){
 		user.setPassword(encoder.encode(user.getPassword()));
 		return new ResponseEntity<Users>(userRepoService.addUser(user),HttpStatus.CREATED);
 	}
 	String token;
-	@PostMapping("/authUser")
+	@PostMapping("/login")
 	public ResponseEntity<String> getToken(@RequestBody AuthUser authUser){
 		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authUser.getUsername(), authUser.getPassword()));
 		if(authentication.isAuthenticated()) {
